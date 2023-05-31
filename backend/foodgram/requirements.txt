@@ -1,0 +1,7 @@
+requests==2.26.0
+Django==3.2
+djangorestframework==3.12.4
+djoser
+pillow
+sorl-thumbnail
+django-filter==23.1
