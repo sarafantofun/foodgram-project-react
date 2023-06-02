@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
@@ -19,6 +20,7 @@ class Tag(models.Model):
     )
 
     class Meta:
+        ordering = ('pk',)
         verbose_name = 'Тег'
         verbose_name_plural = 'Теги'
 
@@ -46,8 +48,11 @@ class Recipe(models.Model):
         upload_to='recipes/images/',
         blank=True
     )
-    cooking_time = models.IntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(720)],
+    cooking_time = models.PositiveSmallIntegerField(
+        validators=[
+            MinValueValidator(settings.MIN_VALIDATOR),
+            MaxValueValidator(settings.MAX_VALIDATOR)
+        ],
         verbose_name='Время приготовления'
     )
     pub_date = models.DateTimeField(
@@ -79,6 +84,7 @@ class Favorite(models.Model):
     )
 
     class Meta:
+        ordering = ('-recipe_id', )
         verbose_name = 'Избранное'
         verbose_name_plural = 'Избранные'
         unique_together = ('user', 'recipe')
@@ -99,6 +105,7 @@ class ShoppingCart(models.Model):
     )
 
     class Meta:
+        ordering = ('-recipe_id', )
         verbose_name = 'Список покупок'
         verbose_name_plural = 'Списки покупок'
         unique_together = ('user', 'recipe')
@@ -112,6 +119,7 @@ class Ingredient(models.Model):
     )
 
     class Meta:
+        ordering = ('name', )
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
 
@@ -130,11 +138,15 @@ class RecipeIngredient(models.Model):
         on_delete=models.CASCADE,
         related_name='recipeingredient'
     )
-    amount = models.IntegerField(
-        validators=(MinValueValidator(1), ),
+    amount = models.PositiveSmallIntegerField(
+        validators=[
+            MinValueValidator(settings.MIN_VALIDATOR),
+            MaxValueValidator(settings.MAX_VALIDATOR)
+        ],
         verbose_name='Количество',
     )
 
     class Meta:
+        ordering = ('-recipe_id', )
         verbose_name = 'РецептИнгредиент'
         verbose_name_plural = 'РецептыИнгредиенты'

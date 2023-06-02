@@ -1,9 +1,7 @@
 from django.contrib import admin
 
-from .models import (
-    Favorite, Tag, Recipe, ShoppingCart, Ingredient, RecipeIngredient
-)
-from users.models import User
+from .models import (Favorite, Ingredient, Recipe, RecipeIngredient,
+                     ShoppingCart, Tag)
 
 
 class TagAdmin(admin.ModelAdmin):
@@ -12,6 +10,7 @@ class TagAdmin(admin.ModelAdmin):
 
 class RecipeIngredientAdmin(admin.TabularInline):
     model = RecipeIngredient
+    min_num = 1
 
 
 class RecipeAdmin(admin.ModelAdmin):
@@ -27,8 +26,7 @@ class RecipeAdmin(admin.ModelAdmin):
     readonly_fields = ('favorites',)
 
     def favorites(self, obj):
-        result = User.objects.filter(fan__recipe=obj).count()
-        return result
+        return obj.favorite.count()
 
 
 class IngredientAdmin(admin.ModelAdmin):

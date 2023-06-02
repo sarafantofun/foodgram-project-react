@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+
 from .validators import validate_username
 
 
@@ -55,17 +56,9 @@ class Subscription(models.Model):
     )
 
     class Meta:
+        ordering = ('-author_id', )
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
-        constraints = [
-            models.UniqueConstraint(
-                fields=['user', 'author'], name='unique subscription'
-            ),
-            models.CheckConstraint(
-                check=~models.Q(author=models.F('user')),
-                name='follower not following',
-            ),
-        ]
 
     def __str__(self):
         return self.user.username

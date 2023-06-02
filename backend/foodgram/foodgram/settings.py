@@ -137,3 +137,7 @@ DJOSER = {
         'user': ['rest_framework.permissions.IsAuthenticated'],
     },
 }
+
+MIN_VALIDATOR = 1
+MAX_VALIDATOR = 720
+MAX_LENGTH_USERNAME = 150

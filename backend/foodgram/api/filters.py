@@ -1,4 +1,5 @@
 from django_filters import rest_framework as filters
+
 from recipes.models import Recipe
 
 
@@ -18,8 +19,10 @@ class RecipeFilter(filters.FilterSet):
         user = self.request.user
         if user.is_authenticated:
             return queryset.filter(favorite__user=user)
+        return queryset
 
     def filter_is_in_shopping_cart(self, queryset, name, alue):
         user = self.request.user
         if user.is_authenticated:
             return queryset.filter(in_carts__user=user)
+        return queryset
