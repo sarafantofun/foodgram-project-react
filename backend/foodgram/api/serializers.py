@@ -1,21 +1,18 @@
 import base64
 
-from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from djoser.serializers import UserSerializer
-from rest_framework.serializers import (CharField, ImageField, IntegerField,
+from rest_framework.serializers import (ImageField, IntegerField,
                                         ModelSerializer,
                                         PrimaryKeyRelatedField, ReadOnlyField,
                                         SerializerMethodField)
-from rest_framework.validators import UniqueValidator
 
 from recipes.models import (Ingredient, Recipe, RecipeIngredient,
                             Tag)
 from users.models import User
-from users.validators import validate_username
 
 
 class RecipeIngredientSerializer(ModelSerializer):
@@ -56,14 +53,6 @@ class Base64ImageField(ImageField):
 
 class MeUserSerializer(UserSerializer):
     is_subscribed = SerializerMethodField(read_only=True)
-    username = CharField(
-        required=True,
-        max_length=settings.MAX_LENGTH_USERNAME,
-        validators=[
-            validate_username,
-            UniqueValidator(queryset=User.objects.all())
-        ]
-    )
 
     class Meta:
         model = User
@@ -159,12 +148,11 @@ class RecipeNotGetSerializer(ModelSerializer):
 
 
 class RecipeShortSerializer(ModelSerializer):
-    image = Base64ImageField()
-
     class Meta:
         fields = (
             'id', 'name', 'image', 'cooking_time',
         )
+        read_only_fields = ('name', 'image', 'cooking_time',)
         model = Recipe
 
 
@@ -195,7 +183,6 @@ class SubscriptionSerializer(MeUserSerializer):
 
 
 class FavoriteSerializer(RecipeShortSerializer):
-
     class Meta(RecipeShortSerializer.Meta):
         fields = RecipeShortSerializer.Meta.fields
 
@@ -211,7 +198,6 @@ class FavoriteSerializer(RecipeShortSerializer):
 
 
 class ShoppingCartSerializer(RecipeShortSerializer):
-
     class Meta(RecipeShortSerializer.Meta):
         fields = RecipeShortSerializer.Meta.fields
 

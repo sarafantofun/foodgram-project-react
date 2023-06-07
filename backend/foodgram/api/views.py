@@ -4,16 +4,16 @@ from django.shortcuts import get_object_or_404
 from djoser.views import UserViewSet
 from rest_framework import status
 from rest_framework.decorators import action
-from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from api.filters import RecipeFilter
+from api.filters import NameFilter, RecipeFilter
 from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
                             ShoppingCart, Tag)
 from users.models import Subscription, User
 
+from .pagination import CustomPagination
 from .permissions import IsAuthorOrReadOnly
 from .serializers import (FavoriteSerializer, IngredientSerializer,
                           MeUserSerializer, RecipeGetSerializer,
@@ -24,17 +24,19 @@ from .serializers import (FavoriteSerializer, IngredientSerializer,
 class MeUserViewSet(UserViewSet):
     queryset = User.objects.all()
     serializer_class = MeUserSerializer
+    pagination_class = CustomPagination
 
     @action(detail=False, permission_classes=(IsAuthenticated,))
     def subscriptions(self, request):
         user = request.user
-        subscriptions = User.objects.filter(following__user=user)
+        queryset = User.objects.filter(following__user=user)
+        pages = self.paginate_queryset(queryset)
         serializer = SubscriptionSerializer(
-            subscriptions,
+            pages,
             many=True,
             context={'request': request}
         )
-        return Response(serializer.data)
+        return self.get_paginated_response(serializer.data)
 
     @action(
         methods=['post', 'delete', ],
@@ -70,6 +72,7 @@ class MeUserViewSet(UserViewSet):
 class RecipeViewSet(ModelViewSet):
     queryset = Recipe.objects.all()
     permission_classes = (IsAuthorOrReadOnly,)
+    pagination_class = CustomPagination
     filterset_class = RecipeFilter
 
     def get_serializer_class(self):
@@ -159,10 +162,12 @@ class RecipeViewSet(ModelViewSet):
 class TagViewSet(ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
+    pagination_class = None
 
 
 class IngredientViewSet(ModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    filter_backends = (SearchFilter,)
+    filter_backends = (NameFilter,)
     search_fields = ('^name',)
+    pagination_class = None
