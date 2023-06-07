@@ -1,5 +1,5 @@
 # Проект **Foodgram - "Продуктовый помощник"**
-ИЗМЕНИТЬ  ![example workflow](https://github.com/sarafantofun/yamdb_final/actions/workflows/yamdb_workflow.yml/badge.svg)
+ИЗМЕНИТЬ НА НОВЫЙ ![example workflow](https://github.com/sarafantofun/yamdb_final/actions/workflows/yamdb_workflow.yml/badge.svg)
 
 ### **Адрес проекта**
 ДОБАВИТЬ
