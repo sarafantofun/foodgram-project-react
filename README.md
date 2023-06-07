@@ -1,8 +1,11 @@
 # Проект **Foodgram - "Продуктовый помощник"**
-ИЗМЕНИТЬ НА НОВЫЙ ![example workflow](https://github.com/sarafantofun/yamdb_final/actions/workflows/yamdb_workflow.yml/badge.svg)
+![example workflow](https://github.com/sarafantofun/foodgram-project-react/actions/workflows/main.yml/badge.svg)
 
-### **Адрес проекта**
-ДОБАВИТЬ
+### **URL проекта**
+http://158.160.11.128/admin <br>
+
+### **Документация доступна по адресу**
+http://158.160.11.128/api/docs/redoc.html <br>
 
 ### **Описание проекта:**
 сайт **Foodgram** - «Продуктовый помощник» <br>
@@ -39,29 +42,20 @@ Yandex cloud
 git clone git@github.com:sarafantofun/foodgram-project-react.git # клонируем проект
 python -m venv venv # Создаем виртуальное окружение
 . venv/Scripts/activate # Активируем виртуальное окружение
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-cd infra/ # Переходим в папку infra/
-docker-compose up # Запуск docker-compose (Документация доступна по адресу http://localhost/api/docs/)
-
-python manage.py importdata #заполняем базу ингредиентами
-# Надо дописать!
-
 ```
 
 ---
 
 ### **шаблон наполнения env-файла**
 
-ПОТОМ НАПИСАТЬ!
 ```
 DB_ENGINE=django.db.backends.postgresql
 DB_NAME=postgres
 POSTGRES_USER=postgres
-POSTGRES_PASSWORD=
+POSTGRES_PASSWORD=postgres
 DB_HOST=db
 DB_PORT=5432
-SECRET_KEY=''
+SECRET_KEY='django-insecure-tqp3-u*dgy)#sovf%4+ny(d7w-z#hj=$5*rh*zev@_3z6sn+1m'
 
 ```
 ---
@@ -77,18 +71,11 @@ DOCKER_USERNAME
 HOST
 POSTGRES_PASSWORD
 POSTGRES_USER
-SECRET_KEY
 SSH_KEY
-TELEGRAM_TO
-TELEGRAM_TOKEN
-USER
 
 ```
 
 ---
-
-### **Спецификация API Foodgram**
-Документация: http://localhost/api/docs/
 
 ---
 
